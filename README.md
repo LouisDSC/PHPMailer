@@ -20,7 +20,7 @@
 ## Contexte `mail()`
 La fonction PHP `mail()` envoie généralement via un serveur de messagerie local, généralement dirigé par un `sendmail()` binaire sur les plates-formes Linux, BSD et macOS, cependant, Windows n'inclut généralement pas de serveur de messagerie local ; Le client SMTP intégré de PHPMailer permet l'envoi d'e-mails sur toutes les plates-formes sans avoir besoin d'un serveur de messagerie local. Sachez cependant que la mail()fonction doit être évitée dans la mesure du possible ; il est à la fois plus rapide et plus sûr d'utiliser SMTP vers localhost.
 
-Si vous n'utilisez pas PHPMailer, il existe de nombreuses autres excellentes bibliothèques que vous devriez consulter avant de lancer la vôtre. Essayez[SwiftMailer](https://swiftmailer.symfony.com/)
+Si vous n'utilisez pas PHPMailer, il existe de nombreuses autres excellentes bibliothèques que vous devriez consulter avant de lancer la vôtre. Essayez [SwiftMailer](https://swiftmailer.symfony.com/)
 , [Laminas/Mail](https://docs.laminas.dev/laminas-mail/), [ZetaComponents](https://github.com/zetacomponents/Mail) etc.
 
 ## Installation
@@ -41,7 +41,7 @@ Dans le dossier `vendor`, le fichier script `vendor/autoload.php` est automatiqu
 
 Si vous souhaitez utiliser la classe d'authentification Gmail XOAUTH2, vous devrez également ajouter une dépendance au`league/oauth2-client` package dans votre fichie `composer.json`.
 
-AUssi, si vous n'utilisez pas Composer, vous pouvez[télécharger PHPMailer sous forme de fichier zip | ou le cloner](https://github.com/LouisDSC/PHPMailer),puis copiez le contenu du dossier PHPMailer dans l'un des `include_path` répertoires spécifiés dans votre Configuration PHP et chargez chaque fichier de classe manuellement :
+AUssi, si vous n'utilisez pas Composer, vous pouvez [télécharger PHPMailer sous forme de fichier zip | ou le cloner](https://github.com/LouisDSC/PHPMailer), puis copiez le contenu du dossier PHPMailer dans l'un des `include_path` répertoires spécifiés dans votre Configuration PHP et chargez chaque fichier de classe manuellement :
 
 ```php
 <?php
@@ -119,4 +119,6 @@ PHPMailer est par défaut en anglais, mais dans le dossier de langue , vous trou
 //Pour charger la version français
 $mail->setLanguage('fr', '/optional/path/to/language/directory/');
 ```
+
+## Bonne chance !
 
