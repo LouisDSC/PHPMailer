@@ -112,7 +112,7 @@ try {
 }
 ```
 
-## Localization
+## Langue Français
 PHPMailer est par défaut en anglais, mais dans le dossier de langue , vous trouverez de nombreuses traductions pour les messages d'erreur PHPMailer que vous pourriez rencontrer. Pour spécifier une langue, vous devez indiquer à PHPMailer laquelle utiliser, comme ceci :
 
 ```php
