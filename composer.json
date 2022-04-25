@@ -1,7 +1,7 @@
 {
     "name": "phpmailer/phpmailer",
     "type": "library",
-    "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
+    "description": "PHPMailer est une classe complète de création et de transfert d'e-mails pour PHP",
     "authors": [
         {
             "name": "Marcus Bointon",
@@ -47,12 +47,12 @@
         "yoast/phpunit-polyfills": "^1.0.0"
     },
     "suggest": {
-        "ext-mbstring": "Needed to send email in multibyte encoding charset or decode encoded addresses",
-        "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
-        "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
-        "psr/log": "For optional PSR-3 debug logging",
-        "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication",
-        "symfony/polyfill-mbstring": "To support UTF-8 if the Mbstring PHP extension is not enabled (^1.2)"
+        "ext-mbstring" : " Nécessaire pour envoyer un e-mail dans un jeu de caractères d'encodage multi-octets ou décoder des adresses encodées " ,
+        "hayageek/oauth2-yahoo" : " Nécessaire pour l'authentification Yahoo XOAUTH2 " ,
+        "league/oauth2-google" : " Nécessaire pour l'authentification Google XOAUTH2 " ,
+        "psr/log" : " Pour la journalisation de débogage PSR-3 facultative " ,
+        "stevenmaguire/oauth2-microsoft" : " Nécessaire pour l'authentification Microsoft XOAUTH2 " ,
+        "symfony/polyfill-mbstring" : " Pour supporter UTF-8 si l'extension PHP Mbstring n'est pas activée (^1.2) "
     },
     "autoload": {
         "psr-4": {
