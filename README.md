@@ -39,10 +39,9 @@ composer require phpmailer/phpmailer
 
 Dans le dossier `vendor`, le fichier script `vendor/autoload.php` est automatiquement généré par <i>Composer</i> et ne fait pas partir PHPMailer.
 
-If you want to use the Gmail XOAUTH2 authentication class, you will also need to add a dependency on the `league/oauth2-client` package in your `composer.json`.
+Si vous souhaitez utiliser la classe d'authentification Gmail XOAUTH2, vous devrez également ajouter une dépendance au`league/oauth2-client` package dans votre fichie `composer.json`.
 
-Alternatively, if you're not using Composer, you
-can [download PHPMailer as a zip file](https://github.com/PHPMailer/PHPMailer/archive/master.zip), (note that docs and examples are not included in the zip file), then copy the contents of the PHPMailer folder into one of the `include_path` directories specified in your PHP configuration and load each class file manually:
+AUssi, si vous n'utilisez pas Composer, vous pouvez[télécharger PHPMailer sous forme de fichier zip | ou le cloner](https://github.com/LouisDSC/PHPMailer),puis copiez le contenu du dossier PHPMailer dans l'un des `include_path` répertoires spécifiés dans votre Configuration PHP et chargez chaque fichier de classe manuellement :
 
 ```php
 <?php
