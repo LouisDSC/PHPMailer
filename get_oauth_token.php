@@ -1,146 +1,128 @@
 <?php
 
 /**
- * PHPMailer - PHP email creation and transport class.
- * PHP Version 5.5
- * @package PHPMailer
- * @see https://github.com/PHPMailer/PHPMailer/ The PHPMailer GitHub project
- * @author Marcus Bointon (Synchro/coolbru) <phpmailer@synchromedia.co.uk>
- * @author Jim Jagielski (jimjag) <jimjag@gmail.com>
- * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
- * @author Brent R. Matzelle (original founder)
- * @copyright 2012 - 2020 Marcus Bointon
- * @copyright 2010 - 2012 Jim Jagielski
- * @copyright 2004 - 2009 Andy Prevost
- * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
- * @note This program is distributed in the hope that it will be useful - WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.
- */
+* Obtenez un jeton OAuth2 auprès d'un fournisseur OAuth2.
+* * Installez ce script sur votre serveur afin qu'il soit accessible
+* comme [https/http]://<votredomaine>/<dossier>/get_oauth_token.php
+* par exemple : http://localhost/phpmailer/get_oauth_token.php
+* * Assurez-vous que les dépendances sont installées avec 'composer install'
+* * Configurer une application dans votre compte Google/Yahoo/Microsoft
+* * Définissez l'adresse du script comme URL de redirection de l'application
+* Si aucun jeton d'actualisation n'est obtenu lors de l'exécution de ce fichier,
+* révoquez l'accès à votre application et réexécutez le script.
+*/
+
+espace de noms  PHPMailer \ PHPMailer ;
 
 /**
- * Get an OAuth2 token from an OAuth2 provider.
- * * Install this script on your server so that it's accessible
- * as [https/http]://<yourdomain>/<folder>/get_oauth_token.php
- * e.g.: http://localhost/phpmailer/get_oauth_token.php
- * * Ensure dependencies are installed with 'composer install'
- * * Set up an app in your Google/Yahoo/Microsoft account
- * * Set the script address as the app's redirect URL
- * If no refresh token is obtained when running this file,
- * revoke access to your app and run the script again.
- */
+* Alias ​​pour les classes de fournisseur de ligue
+* Assurez-vous de les avoir ajoutés à votre composer.json et exécutez `composer install`
+* Beaucoup de choix ici :
+* @voir http://oauth2-client.thephpleague.com/providers/thirdparty/
+*/
+//@voir https://github.com/thephpleague/oauth2-google
+utilisez  League \ OAuth2 \ Client \ Fournisseur \ Google ;
+//@voir https://packagist.org/packages/hayageek/oauth2-yahoo
+utilisez  Hayageek \ OAuth2 \ Client \ Fournisseur \ Yahoo ;
+//@voir https://github.com/stevenmaguire/oauth2-microsoft
+utilisez  Stevenmaguire \ OAuth2 \ Client \ Fournisseur \ Microsoft ;
 
-namespace PHPMailer\PHPMailer;
-
-/**
- * Aliases for League Provider Classes
- * Make sure you have added these to your composer.json and run `composer install`
- * Plenty to choose from here:
- * @see http://oauth2-client.thephpleague.com/providers/thirdparty/
- */
-//@see https://github.com/thephpleague/oauth2-google
-use League\OAuth2\Client\Provider\Google;
-//@see https://packagist.org/packages/hayageek/oauth2-yahoo
-use Hayageek\OAuth2\Client\Provider\Yahoo;
-//@see https://github.com/stevenmaguire/oauth2-microsoft
-use Stevenmaguire\OAuth2\Client\Provider\Microsoft;
-
-if (!isset($_GET['code']) && !isset($_GET['provider'])) {
+if (! isset ( $ _GET [ 'code' ]) && ! isset ( $ _GET [ 'fournisseur' ])) {
     ?>
-<html>
-<body>Select Provider:<br>
-<a href='?provider=Google'>Google</a><br>
-<a href='?provider=Yahoo'>Yahoo</a><br>
-<a href='?provider=Microsoft'>Microsoft/Outlook/Hotmail/Live/Office365</a><br>
-</body>
-</html>
+< html >
+< body > Sélectionnez le fournisseur : < br >
+< a  href =' ?provider=Google ' > Google </ a > < br >
+< a  href =' ?provider=Yahoo ' > Yahoo </ a > < br >
+< a  href =' ?provider=Microsoft ' > Microsoft/Outlook/Hotmail/Live/Office365 </ a > < br >
+</ corps >
+</ html >
     <?php
-    exit;
+    sortie;
 }
 
-require 'vendor/autoload.php';
+nécessite  'vendor/autoload.php' ;
 
-session_start();
+session_start ();
 
-$providerName = '';
+$ nomdufournisseur = '' ;
 
-if (array_key_exists('provider', $_GET)) {
-    $providerName = $_GET['provider'];
-    $_SESSION['provider'] = $providerName;
-} elseif (array_key_exists('provider', $_SESSION)) {
-    $providerName = $_SESSION['provider'];
+if ( array_key_exists ( 'fournisseur' , $ _GET )) {
+    $ nom_fournisseur = $ _GET [ 'fournisseur' ] ;
+    $ _SESSION [ 'fournisseur' ] = $ nom_fournisseur ;
+} elseif ( array_key_exists ( 'fournisseur' , $ _SESSION )) {
+    $ nom_fournisseur = $ _SESSION [ 'fournisseur' ] ;
 }
-if (!in_array($providerName, ['Google', 'Microsoft', 'Yahoo'])) {
-    exit('Only Google, Microsoft and Yahoo OAuth2 providers are currently supported in this script.');
+if (! in_array ( $ nom_fournisseur , [ 'Google' , 'Microsoft' , 'Yahoo' ])) {
+    exit ( 'Seuls les fournisseurs Google, Microsoft et Yahoo OAuth2 sont actuellement pris en charge dans ce script.' );
 }
 
-//These details are obtained by setting up an app in the Google developer console,
-//or whichever provider you're using.
-$clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com';
-$clientSecret = 'RANDOMCHARS-----lGyjPcRtvP';
+//Ces détails sont obtenus en configurant une application dans la console développeur de Google,
+//ou quel que soit le fournisseur que vous utilisez.
+$ clientId = 'RANDOMCHARS-----duv1n2.apps.googleusercontent.com' ;
+$ clientSecret = 'RANDOMCHARS-----lGyjPcRtvP' ;
 
-//If this automatic URL doesn't work, set it yourself manually to the URL of this script
-$redirectUri = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+//Si cette URL automatique ne fonctionne pas, définissez-la vous-même manuellement sur l'URL de ce script
+$ redirectUri = ( isset ( $ _SERVER [ 'HTTPS' ]) ? 'https://' : 'http://' ) . $ _SERVEUR [ 'HTTP_HOST' ] . $ _SERVEUR [ 'PHP_SELF' ] ;
 //$redirectUri = 'http://localhost/PHPMailer/redirect';
 
-$params = [
-    'clientId' => $clientId,
-    'clientSecret' => $clientSecret,
-    'redirectUri' => $redirectUri,
-    'accessType' => 'offline'
-];
+$ paramètres = [
+    'clientId' => $ clientId ,
+    'clientSecret' => $ clientSecret ,
+    'redirectUri' => $ redirectUri ,
+    'accessType' => 'hors ligne'
+] ;
 
-$options = [];
-$provider = null;
+$ options = [] ;
+$ fournisseur = null ;
 
-switch ($providerName) {
-    case 'Google':
-        $provider = new Google($params);
-        $options = [
-            'scope' => [
+switch ( $ nom_fournisseur ) {
+    cas  'Google' :
+        $ fournisseur = nouveau  Google ( $ params );
+        $ options = [
+            'portée' => [
                 'https://mail.google.com/'
             ]
-        ];
-        break;
-    case 'Yahoo':
-        $provider = new Yahoo($params);
-        break;
-    case 'Microsoft':
-        $provider = new Microsoft($params);
-        $options = [
-            'scope' => [
-                'wl.imap',
+        ] ;
+        casser ;
+    cas  'Yahoo' :
+        $ fournisseur = nouveau  Yahoo ( $ params );
+        casser ;
+    cas  'Microsoft' :
+        $ fournisseur = nouveau  Microsoft ( $ params );
+        $ options = [
+            'portée' => [
+                'wl.imap' ,
                 'wl.offline_access'
             ]
-        ];
-        break;
+        ] ;
+        casser ;
 }
 
-if (null === $provider) {
-    exit('Provider missing');
+if ( null === $ fournisseur ) {
+    exit ( 'Fournisseur manquant' );
 }
 
-if (!isset($_GET['code'])) {
-    //If we don't have an authorization code then get one
-    $authUrl = $provider->getAuthorizationUrl($options);
-    $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: ' . $authUrl);
-    exit;
-    //Check given state against previously stored one to mitigate CSRF attack
-} elseif (empty($_GET['state']) || ($_GET['state'] !== $_SESSION['oauth2state'])) {
-    unset($_SESSION['oauth2state']);
-    unset($_SESSION['provider']);
-    exit('Invalid state');
-} else {
-    unset($_SESSION['provider']);
-    //Try to get an access token (using the authorization code grant)
-    $token = $provider->getAccessToken(
-        'authorization_code',
+si (! isset ( $ _GET [ 'code' ])) {
+    // Si nous n'avons pas de code d'autorisation, obtenez-en un
+    $ authUrl = $ fournisseur -> getAuthorizationUrl ( $ options );
+    $ _SESSION [ 'oauth2state' ] = $ fournisseur -> getState ();
+    en-tête ( 'Emplacement : ' . $ authUrl );
+    sortie;
+    // Vérifier l'état donné par rapport à celui précédemment stocké pour atténuer l'attaque CSRF
+} elseif ( vide ( $ _GET [ 'état' ]) || ( $ _GET [ 'état' ] !== $ _SESSION [ 'oauth2state' ])) {
+    unset( $ _SESSION [ 'oauth2state' ]);
+    unset( $ _SESSION [ 'fournisseur' ]);
+    exit ( 'Etat invalide' );
+} sinon {
+    unset( $ _SESSION [ 'fournisseur' ]);
+    //Essayez d'obtenir un jeton d'accès (en utilisant le code d'autorisation)
+    $ jeton = $ fournisseur -> getAccessToken (
+        'code_autorisation' ,
         [
-            'code' => $_GET['code']
+            'code' => $ _GET [ 'code' ]
         ]
     );
-    //Use this to interact with an API on the users behalf
-    //Use this to get a new access token if the old one expires
-    echo 'Refresh Token: ', $token->getRefreshToken();
+    // Utilisez ceci pour interagir avec une API au nom des utilisateurs
+    // Utilisez ceci pour obtenir un nouveau jeton d'accès si l'ancien expire
+    echo  'Refresh Token: ' , $ token -> getRefreshToken ();
 }
