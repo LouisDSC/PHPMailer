@@ -1,7 +1,7 @@
 # Security notices relating to PHPMailer
 
 Please disclose any security issues or vulnerabilities found through [Tidelift's coordinated disclosure system](https://tidelift.com/security) or to the maintainers privately.
-
+ 
 PHPMailer 6.4.1 and earlier contain a vulnerability that can result in untrusted code being called (if such code is injected into the host project's scope by other means). If the `$patternselect` parameter to `validateAddress()` is set to `'php'` (the default, defined by `PHPMailer::$validator`), and the global namespace contains a function called `php`, it will be called in preference to the built-in validator of the same name. Mitigated in PHPMailer 6.5.0 by denying the use of simple strings as validator function names. Recorded as [CVE-2021-3603](https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2021-3603).
 
 PHPMailer versions 6.4.1 and earlier contain a possible remote code execution vulnerability through the `$lang_path` parameter of the `setLanguage()` method. If the `$lang_path` parameter is passed unfiltered from user input, it can be set to [a UNC path](https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats#unc-paths), and if an attacker is also able to persuade the server to load a file from that UNC path, a script file under their control may be executed. This vulnerability only applies to systems that resolve UNC paths, typically only Microsoft Windows.
